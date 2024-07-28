@@ -1,12 +1,10 @@
 const express = require("express");
 const database = require("../connect");
-const { ObjectId } = require("mongodb");
-
 const eventsRoutes = express.Router();
 
 //getAllEvents
 eventsRoutes.route("/events").get(async (request, response) => {
-  let db = database.getDb();
+  let db = await database.getDb();
   let data = await db.collection("Events").find({}).toArray();
 
   if (data.length > 0) {
