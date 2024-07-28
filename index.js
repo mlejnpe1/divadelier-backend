@@ -35,6 +35,10 @@ const users = [
     });
   };
 
+  app.get("/", (req, res) => {
+    res.send("Express on Vercel");
+  });
+
   app.post('/login', (req, res) => {
     const { username, password } = req.body;
   
