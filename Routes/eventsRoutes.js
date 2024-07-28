@@ -4,8 +4,7 @@ const eventsRoutes = express.Router();
 
 //getAllEvents
 eventsRoutes.route("/events").get(async (request, response) => {
-  let db = await database.getDb();
-  console.log(database.getDb())
+  let db = database.getDb();
   let data = await db.collection("Events").find({}).toArray();
 
   if (data.length > 0) {
