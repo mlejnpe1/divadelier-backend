@@ -14,7 +14,7 @@ let database
 
 module.exports = {
     connectToServer: ()=>{
-        database = client.db("Divadelier")
+        database = client.db("divadelier-deploy")
     },
     getDb: ()=>{
         return database
