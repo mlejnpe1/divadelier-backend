@@ -43,11 +43,13 @@ const users = [
 ];
 
 const authenticateToken = (req, res, next) => {
-  const token = req.headers['authorization'];
-  if (token == null) return res.sendStatus(401);
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1]; // Extract token from "Bearer <token>"
+
+  if (token == null) return res.sendStatus(401); // No token provided
 
   jwt.verify(token, "muj_tajny_token", (err, user) => {
-    if (err) return res.sendStatus(403);
+    if (err) return res.sendStatus(403); // Invalid token
     req.user = user;
     next();
   });
@@ -68,7 +70,7 @@ app.post('/login', (req, res) => {
 //Events apis
 
 //Get all events
-app.get("/events", async (req, res)=>{
+app.get("/events", authenticateToken, async (req, res)=>{
   let data = await database.collection("Events").find({}).toArray();
 
   if (data.length > 0) {
@@ -80,7 +82,7 @@ app.get("/events", async (req, res)=>{
 })
 
 //add new event
-app.post("/events", async (req, res) => {
+app.post("/events", authenticateToken, async (req, res) => {
   let mongoObject = {
     date: req.body.date,
     location: req.body.location,
@@ -92,7 +94,7 @@ app.post("/events", async (req, res) => {
 });
 
 //delete event
-app.delete("/events/:id", async (req, res) => {
+app.delete("/events/:id", authenticateToken, async (req, res) => {
   const eventId = new ObjectId(req.params.id);
   try {
     if(database.collection("Events").findOne({_id: eventId})){
