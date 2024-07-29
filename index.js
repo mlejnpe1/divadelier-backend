@@ -70,7 +70,7 @@ app.post('/login', (req, res) => {
 //Events apis
 
 //Get all events
-app.get("/events", authenticateToken, async (req, res)=>{
+app.get("/events", async (req, res)=>{
   let data = await database.collection("Events").find({}).toArray();
 
   if (data.length > 0) {
